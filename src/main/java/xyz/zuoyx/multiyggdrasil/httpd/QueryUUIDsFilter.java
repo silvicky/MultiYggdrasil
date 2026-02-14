@@ -47,12 +47,16 @@ public class QueryUUIDsFilter implements URLFilter {
 
 	@Override
 	public boolean canHandle(String domain) {
-		return domain.equals("api.mojang.com");
+		return domain.equals("api.mojang.com")|| domain.equals("api.minecraftservices.com");
 	}
 
 	@Override
 	public void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
-		if (domain.equals("api.mojang.com") && path.equals("/profiles/minecraft") && exchange.getRequestMethod().equals("POST")) {
+		if (
+				(domain.equals("api.mojang.com") && path.equals("/profiles/minecraft") && exchange.getRequestMethod().equals("POST")) ||
+						(domain.equals("api.minecraftservices.com") && path.equals("/minecraft/profile/lookup/bulk/byname") && exchange.getRequestMethod().equals("POST"))
+		)
+		{
 			Set<String> request = new LinkedHashSet<>();
 			parseJson(asString(asBytes(exchange.getRequestBody()))).getAsJsonArray()
 					.forEach(element -> request.add(asJsonString(element)));

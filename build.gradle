@@ -1,5 +1,5 @@
 plugins {
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
+	id 'com.gradleup.shadow' version '9.3.1'
 	id 'com.palantir.git-version' version '3.0.0'
 	id 'java'
 }
@@ -10,16 +10,12 @@ repositories {
 
 dependencies {
 	implementation 'com.google.code.gson:gson:2.10.1'
-	implementation 'org.ow2.asm:asm:9.6'
+	implementation 'org.ow2.asm:asm:9.9'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
 }
 
-test {
-	useJUnitPlatform()
-}
-
 compileJava {
-	options.release = 17
+	options.release = 25
 }
 
 def buildNumber = System.getenv('AI_BUILD_NUMBER')
