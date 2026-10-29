@@ -127,6 +127,7 @@ public class URLProcessor {
 	}
 
 	private HttpServer createHttpServer() throws IOException {
+		final URLProcessor urlProcessor = this;
 		HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", Config.httpdPort), 0);
 		server.createContext("/debug/", exchange -> debugApi.serve(exchange));
 		server.createContext("/", exchange -> {
@@ -138,7 +139,7 @@ public class URLProcessor {
 				for (URLFilter filter : filters) {
 					if (filter.canHandle(domain)) {
 						try {
-							filter.handle(domain, path, exchange);
+							filter.handle(urlProcessor, domain, path, exchange);
 						} catch (UnsupportedURLException e) {
 							continue;
 						} catch (Throwable e) {

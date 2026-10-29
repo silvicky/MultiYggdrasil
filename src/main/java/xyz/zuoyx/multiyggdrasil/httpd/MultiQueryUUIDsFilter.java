@@ -52,8 +52,8 @@ public class MultiQueryUUIDsFilter implements URLFilter {
 	}
 
 	@Override
-	public void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
-		if (domain.equals("api.mojang.com") && path.equals("/profiles/minecraft") && exchange.getRequestMethod().equals("POST")) {
+	public void handle(URLProcessor urlProcessor, String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
+		if (domain.equals("api.mojang.com") && (path.equals("/profiles/minecraft") || path.equals("/minecraft/profile/lookup/bulk/byname")) && exchange.getRequestMethod().equals("POST")) {
 			Set<String> request = new LinkedHashSet<>();
 			parseJson(asString(asBytes(exchange.getRequestBody()))).getAsJsonArray()
 					.forEach(element -> request.add(asJsonString(element)));

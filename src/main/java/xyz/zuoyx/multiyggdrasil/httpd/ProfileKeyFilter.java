@@ -44,7 +44,7 @@ public class ProfileKeyFilter implements URLFilter {
 	}
 
 	@Override
-	public void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
+	public void handle(URLProcessor urlProcessor, String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
 		if (domain.equals("api.minecraftservices.com") && path.equals("/player/certificates") && exchange.getRequestMethod().equals("POST")) {
 			sendResponse(exchange, 200, CONTENT_TYPE_JSON, toJsonString(makeDummyResponse()).getBytes());
 		} else {

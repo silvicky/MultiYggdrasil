@@ -49,6 +49,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import xyz.zuoyx.multiyggdrasil.httpd.DefaultURLRedirector;
+import xyz.zuoyx.multiyggdrasil.httpd.DiscoveryFilter;
 import xyz.zuoyx.multiyggdrasil.httpd.LegacySkinAPIFilter;
 import xyz.zuoyx.multiyggdrasil.httpd.ProfileKeyFilter;
 import xyz.zuoyx.multiyggdrasil.httpd.PublickeysFilter;
@@ -207,9 +208,17 @@ public final class MultiYggdrasil {
 	}
 
 	private static void warnIfHttp(String url) {
-		if (url.toLowerCase().startsWith("http://")) {
-			log(WARNING, "You are using HTTP protocol, which is INSECURE! Please switch to HTTPS if possible.");
+		URI uri = URI.create(url);
+		if (!"http".equalsIgnoreCase(uri.getScheme())) {
+			return;
 		}
+
+		String host = uri.getHost();
+		if ("localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host) || "[::1]".equals(host)) {
+			return;
+		}
+
+		log(WARNING, "You are using HTTP protocol, which is INSECURE! Please switch to HTTPS if possible.");
 	}
 
 	private static String addHttpsIfMissing(String url) {
@@ -289,6 +298,8 @@ public final class MultiYggdrasil {
 
 		filters.add(new PublickeysFilter());
 
+		filters.add(new DiscoveryFilter());
+
 		return filters;
 	}
 
@@ -323,6 +334,9 @@ public final class MultiYggdrasil {
 
 		transformer.units.add(new SkinWhitelistTransformUnit());
 		SkinWhitelistTransformUnit.getWhitelistedDomains().addAll(config.getSkinDomains());
+		if (SkinWhitelistTransformUnit.getWhitelistedDomains().stream().anyMatch(p -> p.matches("\\*+"))) {
+			log(INFO, "Texture domain whitelist is disabled (skinDomains wildcard)");
+		}
 
 		transformer.units.add(new YggdrasilKeyTransformUnit());
 		config.getDecodedPublickey().ifPresent(YggdrasilKeyTransformUnit.PUBLIC_KEYS::add);

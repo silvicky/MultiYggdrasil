@@ -54,7 +54,7 @@ public class MultiQueryProfileFilter implements URLFilter {
 	}
 
 	@Override
-	public void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
+	public void handle(URLProcessor urlProcessor, String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
 		if (!domain.equals("sessionserver.mojang.com"))
 			throw new UnsupportedURLException();
 		Matcher matcher = PATH_REGEX.matcher(path);

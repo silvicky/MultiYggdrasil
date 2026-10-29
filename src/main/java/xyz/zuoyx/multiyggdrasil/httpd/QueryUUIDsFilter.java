@@ -51,9 +51,9 @@ public class QueryUUIDsFilter implements URLFilter {
 	}
 
 	@Override
-	public void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
+	public void handle(URLProcessor urlProcessor, String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException {
 		if (
-				(domain.equals("api.mojang.com") && path.equals("/profiles/minecraft") && exchange.getRequestMethod().equals("POST")) ||
+				(domain.equals("api.mojang.com") && (path.equals("/profiles/minecraft") || path.equals("/minecraft/profile/lookup/bulk/byname")) && exchange.getRequestMethod().equals("POST")) ||
 						(domain.equals("api.minecraftservices.com") && path.equals("/minecraft/profile/lookup/bulk/byname") && exchange.getRequestMethod().equals("POST"))
 		)
 		{

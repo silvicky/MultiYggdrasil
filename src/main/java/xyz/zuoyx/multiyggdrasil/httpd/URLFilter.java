@@ -36,5 +36,5 @@ public interface URLFilter {
 	 */
 	boolean canHandle(String domain);
 
-	void handle(String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException;
+	void handle(URLProcessor urlProcessor, String domain, String path, HttpExchange exchange) throws UnsupportedURLException, IOException;
 }
