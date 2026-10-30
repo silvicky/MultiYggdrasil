@@ -52,11 +52,11 @@ public class NamespacedID {
     }
 
     public String getId() {
-        return namespace;
+        return id;
     }
 
     public String getNamespace() {
-        return id;
+        return namespace;
     }
 
     public static NamespacedID parse(String name) {
